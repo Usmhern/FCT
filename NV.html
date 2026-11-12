@@ -104,43 +104,11 @@
             margin-bottom: 50px;
         }
 
-        /* Top Banner inside Card */
-        .verified-banner {
-            background-color: #0b3b24;
-            color: white;
-            padding: 24px 20px;
-        }
-        .verified-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 6px;
-        }
-        
-        /* Icon Na Farko */
-        .verified-icon-img {
-            width: 40px;
-            height: 40px;
-            padding: 8px;
-            margin-top: 10px;
-            box-sizing: border-box;
-            object-fit: contain;
-            flex-shrink: 0;
-            background: rgba(243, 244, 246, 0.2);
-            border-radius: 10px;
-        }
-
-        .verified-header-text h2 {
-            font-family: 'Sora', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .verified-banner p {
-            font-size: 12px;
-            color: #d1d5db;
-            line-height: 1.4;
-            padding-left: 54px;
+        /* Top Banner Image replacement (Vr.png) */
+        .verified-banner-img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
         }
 
         /* Details Section */
@@ -343,16 +311,8 @@
 
     <!-- Main Card Content -->
     <div class="card" id="main-card">
-        <!-- Verified Banner with Icon Na Farko -->
-        <div class="verified-banner">
-            <div class="verified-header">
-                <img src="Icon1.png" alt="Verified Badge" class="verified-icon-img">
-                <div class="verified-header-text">
-                    <h2>Verified affidavit</h2>
-                </div>
-            </div>
-            <p>This affidavit is genuine and on record with the FCT High Court.</p>
-        </div>
+        <!-- Verified Banner Image (Vr.png) -->
+        <img src="Vr.png" alt="Verified Affidavit Banner" class="verified-banner-img">
 
         <!-- Details Body -->
         <div class="details-body">
@@ -387,7 +347,7 @@
                 <span class="status-badge"><span class="status-dot"></span> VALID</span>
             </div>
 
-            <!-- Registry Note with Icon Na Biyu -->
+            <!-- Registry Note -->
             <div class="registry-check">
                 <img src="Icon2.png" alt="Shield Check" class="registry-shield-img">
                 <span>Checked against the court registry on 12 November 2026</span>
