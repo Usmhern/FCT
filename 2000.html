@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VARMS - Virtual Affidavit Registry Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+        body {
+            background: linear-gradient(to bottom, #ffffff 50%, #f3f4f6 50%);
+            color: #1f2937;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+            position: relative;
+        }
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loader-card {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 480px;
+            height: 380px;
+            justify-content: center;
+        }
+        .spinner {
+            width: 42px;
+            height: 42px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 25px;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .navbar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #ffffff;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .nav-left img.court-logo {
+            width: 150px;
+            height: 50px;
+            object-fit: contain;
+        }
+        .login-btn {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: none;
+            margin-top: 10px;
+            margin-bottom: 50px;
+        }
+        .verified-banner {
+            background-image: url('Vr.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #0b3b24;
+            color: white;
+            padding: 24px 20px;
+        }
+        .verified-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 6px;
+        }
+        .verified-icon-img {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            object-fit: contain;
+            flex-shrink: 0;
+            background: rgba(243, 244, 246, 0.2);
+            border-radius: 10px;
+        }
+        .verified-header-text h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .verified-banner p {
+            font-size: 12px;
+            color: #d1d5db;
+            line-height: 1.4;
+            padding-left: 54px;
+        }
+        .details-body {
+            padding: 20px;
+        }
+        .photo-signature-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: flex-start;
+        }
+        .box-wrapper {
+            width: 105px;
+            height: 85px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .box-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .signature-box-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .signature-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 8.5px;
+            color: #9ca3af;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: left;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .info-row:last-of-type {
+            border-bottom: none;
+            margin-bottom: 12px;
+        }
+        .info-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .info-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111827;
+            text-align: right;
+        }
+        .status-badge {
+            background-color: #ecfdf5;
+            color: #065f46;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+        .registry-check {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: #4b5563;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+        .registry-shield-img {
+            width: 15px;
+            height: 15px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .verify-btn {
+            display: block;
+            width: 100%;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            text-align: center;
+            padding: 13px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .verify-btn:hover {
+            background-color: #e5e7eb;
+        }
+        .live-chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #d97706;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .live-chat-widget .chat-bubble-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+        .chat-notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background-color: #dc2626;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+    </style>
+
+
+    <div id="loader-overlay">
+        <div class="loader-card">
+            <svg class="spinner" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#333">
+                    <rect x="47" y="10" width="6" height="20" rx="3" opacity="1"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(30 50 50)" opacity="0.91"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(60 50 50)" opacity="0.83"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(90 50 50)" opacity="0.75"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(120 50 50)" opacity="0.66"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(150 50 50)" opacity="0.58"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(180 50 50)" opacity="0.5"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(210 50 50)" opacity="0.41"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(240 50 50)" opacity="0.33"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(270 50 50)" opacity="0.25"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(300 50 50)" opacity="0.16"></rect>
+                    <rect x="47" y="10" width="6" height="20" rx="3" transform="rotate(330 50 50)" opacity="0.08"></rect>
+                </g>
+            </svg>
+            <div class="loader-text">Checking the registry...</div>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="nav-left">
+            <img src="Logo.png" alt="Logo" class="court-logo">
+        </div>
+        <a href="#" class="login-btn">Log in</a>
+    </div>
+
+    <div class="card" id="main-card">
+        <div class="verified-banner">
+            <div class="verified-header">
+                <img src="Icon1.png" alt="Verified Badge" class="verified-icon-img">
+                <div class="verified-header-text">
+                    <h2>Verified affidavit</h2>
+                </div>
+            </div>
+            <p>This affidavit is genuine and on record with the FCT High Court.</p>
+        </div>
+
+        <div class="details-body">
+            <div class="photo-signature-container">
+                <div class="box-wrapper">
+                    <img id="display-passport" src="Aff200.jpg" alt="Passport">
+                </div>
+                <div class="signature-box-container">
+                    <div class="box-wrapper">
+                        <img id="display-sign" src="Sign200.jpg" alt="Signature">
+                    </div>
+                    <span class="signature-label">SIGNATURE</span>
+                </div>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Deponent</span>
+                <span class="info-value" id="display-name">USMAN SULEIMAN</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Affidavit</span>
+                <span class="info-value">GENERAL FORM OF AFFIDAVIT</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Reference code</span>
+                <span class="info-value" id="display-code">K6HDA9Y9KYIZM</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="status-badge"><span class="status-dot"></span> VALID</span>
+            </div>
+
+            <div class="registry-check">
+                <img src="Icon2.png" alt="Shield Check" class="registry-shield-img">
+                <span>Checked against the court registry on 12 November 2026</span>
+            </div>
+
+            <button class="verify-btn" onclick="window.location.href='#'">Verify another affidavit</button>
+        </div>
+    </div>
+
+    <div class="live-chat-widget">
+        <svg class="chat-bubble-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
+        <span>Chat with a live agent!</span>
+        <span class="chat-notification-badge">1</span>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (id) {
+                document.getElementById('display-code').innerText = id;
+            }
+            setTimeout(function() {
+                document.getElementById('loader-overlay').style.display = 'none';
+                document.getElementById('main-card').style.display = 'block';
+            }, 1100);
+        };
+    </script>
+
+
