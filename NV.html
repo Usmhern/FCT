@@ -104,11 +104,46 @@
             margin-bottom: 50px;
         }
 
-        /* Top Banner Image replacement (Vr.png) */
-        .verified-banner-img {
-            width: 100%;
-            display: block;
-            object-fit: cover;
+        /* Top Banner Container mai amfani da hoton Vr.png a matsayin background */
+        .verified-banner {
+            background-image: url('Vr.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #0b3b24; /* Fallback color idan hoton bai fito ba */
+            color: white;
+            padding: 24px 20px;
+        }
+        .verified-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 6px;
+        }
+        
+        /* Icon Na Farko (Icon1.png) */
+        .verified-icon-img {
+            width: 40px;
+            height: 40px;
+            padding: 8px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            object-fit: contain;
+            flex-shrink: 0;
+            background: rgba(243, 244, 246, 0.2);
+            border-radius: 10px;
+        }
+
+        .verified-header-text h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .verified-banner p {
+            font-size: 12px;
+            color: #d1d5db;
+            line-height: 1.4;
+            padding-left: 54px;
         }
 
         /* Details Section */
@@ -311,8 +346,16 @@
 
     <!-- Main Card Content -->
     <div class="card" id="main-card">
-        <!-- Verified Banner Image (Vr.png) -->
-        <img src="Vr.png" alt="Verified Affidavit Banner" class="verified-banner-img">
+        <!-- Verified Banner (Vr.png a matsayin background da rubutu da icon a sama) -->
+        <div class="verified-banner">
+            <div class="verified-header">
+                <img src="Icon1.png" alt="Verified Badge" class="verified-icon-img">
+                <div class="verified-header-text">
+                    <h2>Verified affidavit</h2>
+                </div>
+            </div>
+            <p>This affidavit is genuine and on record with the FCT High Court.</p>
+        </div>
 
         <!-- Details Body -->
         <div class="details-body">
