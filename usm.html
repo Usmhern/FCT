@@ -332,11 +332,11 @@
         <div class="details-body">
             <div class="photo-signature-container">
                 <div class="box-wrapper">
-                    <img id="display-passport" src="Aff254.jpg" alt="Passport">
+                    <img id="display-passport" src="Aff253.jpg" alt="Passport">
                 </div>
                 <div class="signature-box-container">
                     <div class="box-wrapper">
-                        <img id="display-sign" src="Sign254.jpg" alt="Signature">
+                        <img id="display-sign" src="Sign253.jpg" alt="Signature">
                     </div>
                     <span class="signature-label">SIGNATURE</span>
                 </div>
@@ -352,7 +352,7 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Reference code</span>
-                <span class="info-value" id="display-code">US1WK1ISQ1OQ2</span>
+                <span class="info-value" id="display-code">UBGUS9UNYBQWQ</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Status</span>
@@ -382,11 +382,14 @@
                 document.getElementById('display-code').innerText = id;
             }
 
-            // Set current date dynamically
+            // Set current date explicitly matching "day month year" format (e.g., 16 November 2026)
             const now = new Date();
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const formattedDate = now.toLocaleDateString('en-US', options);
-            document.getElementById('registry-date-text').innerText = 'Checked against the court registry on ' + formattedDate;
+            const day = now.getDate();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const month = monthNames[now.getMonth()];
+            const year = now.getFullYear();
+
+            document.getElementById('registry-date-text').innerText = `Checked against the court registry on ${day} ${month} ${year}`;
 
             setTimeout(function() {
                 document.getElementById('loader-overlay').style.display = 'none';
