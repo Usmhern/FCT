@@ -1,2 +1,1 @@
-# Affidavit-
 GENERAL FORM OF AFFIDAVIT 
